@@ -3,6 +3,7 @@ CoordenadasY = 20
 porta_avioes = [3,4]
 cruzador = [4,3]
 fragata = [5,2]
+intervalo = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19']
 def gerador_Tabuleiro():
     global tabuleiro
     tabuleiro = [0] * CoordenadasX
@@ -53,19 +54,21 @@ def posicionar_pecas():
         print(f"Os valores de X variam de 0 até 19, e os de Y variam de 0 até {limiteY}")
         while True:#pergunta as coordenadas, preenche a matriz e valida os dados 
             while True:#valida coordenada X
-                entrada_X = int(input("Dê as coordenadas de X que gostaria de dispor a peça: "))
-                if entrada_X > 19 or entrada_X < 0:
-                    print("Coordenada inexistente. Tente novamente! ")
-                    continue
-                else:
-                    break
+                entrada_X = input("Dê as coordenadas de X que gostaria de dispor a peça: ")
+                if entrada_X in intervalo:
+                  entrada_X = int(entrada_X)
+                  break
+                else: 
+                  print('Entrada inválida ou Coordenada inexistente. Tente novamente!')
+                  continue
             while True:#valida coordenada Y:
-                entrada_Y = int(input("Dê as coordenadas de Y que gostaria de dispor a peça: "))
-                if entrada_Y > limiteY or entrada_Y < 0:
-                    print("Coordenada inexistente.Tente novamente! ")
-                    continue
-                else:
-                    break            
+                entrada_Y = input("Dê as coordenadas de Y que gostaria de dispor a peça: ")
+                if entrada_Y in intervalo:
+                  entrada_Y = int(entrada_Y)
+                  break
+                else: 
+                  print('Entrada inválida ou Coordenada inexistente. Tente novamente!')
+                  continue          
             for verifica in range(quant_Pecas):#testa se as coordenadas estão livres
                 if tabuleiro[entrada_X][entrada_Y+verifica] != 0:
                     print(f"Posição [{entrada_X}][{entrada_Y+verifica}] já ocupada por outra embarcação. Tente outra!")
@@ -73,15 +76,16 @@ def posicionar_pecas():
                     break
                 else: 
                     ocupada = False
-            if ocupada:
+            if ocupada:#verifica se todas as posições testadas estão ocupadas ou não, se True, pergunta novas coordernadas
                 continue
-            else:     
+            else:#se não, preenche o tabuleiro
                 for pecas in range(quant_Pecas):#preenche o tabuleiro
                     tabuleiro[entrada_X][entrada_Y+pecas] = id_navio             
                 break
         visualizar_Tabuleiro()
         quant_avioes -= 1
-def tentativa():#debugar e afinar o code
+def tentativa():
+    pontuacao = 0
     cont_partesRestantes = 0
     for x in range(CoordenadasX):
         for y in range(CoordenadasY):
@@ -89,36 +93,120 @@ def tentativa():#debugar e afinar o code
                 cont_partesRestantes += 1
     while cont_partesRestantes != 0:
         while True:
-            tentativa_X = int(input("Dê a coordenada de X do alvo: "))
-            if tentativa_X > 19 or tentativa_X < 0:
-                print("Coordenada inexistente. Tente novamente! ")
-                continue
+            tentativa_X = input("Dê a coordenada de X do alvo: ")
+            if tentativa_X in intervalo:
+              tentativa_X = int(tentativa_X)
+              break
             else: 
-                break
+              print('Entrada inválida ou Coordenada inexistente. Tente novamente!')
+              continue
         while True:
-            tentativa_Y = int(input("Dê a coordenada de Y do alvo: "))
-            if tentativa_Y > 19 or tentativa_Y < 0:
-                print("Coordenada inexistente. Tente novamente! ")
-                continue
+            tentativa_Y = input("Dê a coordenada de Y do alvo: ")
+            if tentativa_Y in intervalo:
+              tentativa_Y = int(tentativa_Y)
+              break
             else: 
-                break
+              print('Entrada inválida ou Coordenada inexistente. Tente novamente!')
+              continue
         if tabuleiro[tentativa_X][tentativa_Y] != '0':
-            if tabuleiro[tentativa_X][tentativa_Y] != 'X':            
-                print("Tem algo aqui")
+            if tabuleiro[tentativa_X][tentativa_Y] == 'P':            
+                print("PORTA-AVIÃO")
                 tabuleiro[tentativa_X][tentativa_Y] = 'X'
                 alvo_atingido = True
+                # checar 4 indices
+                if tentativa_Y == 19:# se o alvo estiver na ultima posição 
+                  for y in range(1,4):
+                    if tabuleiro[tentativa_X][tentativa_Y-y] == 'X':
+                      valida_ponto = True
+                    else:
+                      valida_ponto = False
+                      break
+                  if valida_ponto:
+                    print('Você naufragou um Porta-Aviões')
+                    pontuacao += 30
+                elif tentativa_Y == 0:# se o alvo estiver na primeira posição 
+                  for y in range(1,4):
+                    if tabuleiro[tentativa_X][tentativa_Y+y] == 'X':
+                      valida_ponto = True
+                    else:
+                      valida_ponto = False
+                      break
+                  if valida_ponto:
+                    print('Você naufragou um Porta-Aviões')
+                    pontuacao += 30
+                else: #validar as 4 possíveis posições do tiro no porta-aviões
+                  for y in range(1,4):
+                    if tabuleiro[tentativa_X][tentativa_Y-y] == 'X':
+                      valida_ponto = True
+                    else:
+                      valida_ponto = False
+                      break
+                  if valida_ponto:
+                    print('Você naufragou um Porta-Aviões')
+                    pontuacao += 3061                  
+            elif tabuleiro[tentativa_X][tentativa_Y] == 'C':
+                print("CRUZADOR")
+                tabuleiro[tentativa_X][tentativa_Y] = 'X'
+                alvo_atingido = True
+                # checar 3 indices
+                if tentativa_Y == 19:# se o alvo estiver na ultima posição
+                  for y in range(1,3):
+                    if tabuleiro[tentativa_X][tentativa_Y-y] == 'X':
+                      valida_ponto = True
+                    else:
+                      valida_ponto = False
+                      break
+                  if valida_ponto:
+                    print('Você naufragou um Cruzador')
+                    pontuacao += 20
+                elif tentativa_Y == 0:# se o alvo estiver na primeira posição
+                  for y in range(1,3):
+                    if tabuleiro[tentativa_X][tentativa_Y+y] == 'X':
+                      valida_ponto = True
+                    else:
+                      valida_ponto = False
+                      break
+                  if valida_ponto:
+                    print('Você naufragou um Cruzador')
+                    pontuacao += 20
+                #else: validar as 3 possíveis posições de tiro no cruzador
+            elif tabuleiro[tentativa_X][tentativa_Y] == 'F':
+                print("FRAGATA")
+                tabuleiro[tentativa_X][tentativa_Y] = 'X'
+                alvo_atingido = True
+                # checar 2 indices
+                if tentativa_Y == 19:# se o alvo estiver na ultima posição 
+                  if tabuleiro[tentativa_X][tentativa_Y-1] == 'X':
+                    print('Você naufragou uma Fragata')
+                    pontuacao += 10
+                elif tentativa_Y == 0:# se o alvo estiver na primeira posição
+                  if tabuleiro[tentativa_X][tentativa_Y+1] == 'X':
+                    print('Você naufragou uma Fragata')
+                    pontuacao += 10
+                else:
+                  if tabuleiro[tentativa_X][tentativa_Y+1] == 'X' or tabuleiro[tentativa_X][tentativa_Y-1] == 'X' :
+                    print('Você naufragou uma Fragata')
+                    pontuacao += 10                 
             else: 
                 print("Parte do návio já atingida")
                 continue
         else:
             print("Nada consta.")
             alvo_atingido = False
-        if alvo_atingido:
-            cont_partesRestantes -= 1
-            continue
+            pontuacao -= 1
+        
+        sair = input(f"sua pontuação é {pontuacao}.\n se deseja fechar o jogo, digite 0, caso contrário, pressione Enter.")#mecanismo de saida do jogo
+        if sair == "0":
+          break
         else:
-            cont_partesRestantes = cont_partesRestantes
-            continue
+          if alvo_atingido:
+              cont_partesRestantes -= 1
+              continue
+          else:
+              cont_partesRestantes = cont_partesRestantes
+              continue
+          
+    print("Todas as embarcações foram atingidas!")
 def main():
     gerador_Tabuleiro()
     posicionar_pecas()
