@@ -13,12 +13,12 @@ def visualizar_Tabuleiro():
     for x in range(CoordenadasX):
         print(tabuleiro[x])
 def posicionar_pecas():
-    quant_avioes = 12
+    quant_navios = 12
     cont_portaAvioes = 0
     cont_cruzador = 0
     cont_fragata = 0
     print("Modelos de Navios\n","Porta-Aviões (Você possui 3, e cada uma possui 4 partes)\n","Cruzador (Você possui 4, e cada um possui 3 partes)\n","Fragata (Você possui 5 e cada um possui 2 partes)\n")
-    while quant_avioes > 0:
+    while quant_navios > 0:#laço que só se encerra ao posicionar todos as navios
         print("Identificação das embarcações \n","P - Porta-Aviões.\n","C - Cruzador.\n","F - Fragata.\n")
         while True:#recebe e valida o tipo da embarcação
             id_navio = input("Dê a identificação do návio: ")
@@ -87,7 +87,7 @@ def posicionar_pecas():
                     tabuleiro[entrada_X][entrada_Y+pecas] = id_navio             
                 break
         visualizar_Tabuleiro()
-        quant_avioes -= 1
+        quant_navios -= 1
 def valida_pontos(tentativa_X,tentativa_Y,partes):
   valido = None
   if tentativa_Y+partes == 19 or tentativa_Y == 0:
@@ -104,6 +104,19 @@ def valida_pontos(tentativa_X,tentativa_Y,partes):
           else:
             valido = False
             break
+  else:
+    for indices in range(1,partes+1):
+      if tabuleiro[tentativa_X][tentativa_Y+indices] == 'X':
+        valido = True
+      else:
+        valido = False
+        break
+    for indices in range(1,partes+1):
+      if tabuleiro[tentativa_X][tentativa_Y-indices] == 'X':
+        valido = True
+      else:
+        valido = False
+        break
   if valido == True:
     return True
   else:

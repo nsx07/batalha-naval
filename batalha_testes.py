@@ -107,6 +107,20 @@ def valida_pontos(tentativa_X,tentativa_Y,partes):
           else:
             valido = False
             break
+  else:
+    for indices in range(1,partes+1):
+      if tabuleiro[tentativa_X][tentativa_Y+indices] == 'X':
+        valido = True
+      else:
+        valido = False
+        break
+    for indices in range(1,partes+1):
+      if tabuleiro[tentativa_X][tentativa_Y-indices] == 'X':
+        valido = True
+      else:
+        valido = False
+        break
+        
   if valido == True:
     return True
   else:
@@ -120,7 +134,7 @@ def tentativa():
                 cont_partesRestantes += 1
     while cont_partesRestantes != 0:
         while True:
-            tentativa_X = randint(0,19)
+            tentativa_X = input('X: ')
             if tentativa_X in intervalo:
               tentativa_X = int(tentativa_X)
               break
@@ -128,7 +142,7 @@ def tentativa():
               print('Entrada inválida ou Coordenada inexistente. Tente novamente!')
               continue
         while True:
-            tentativa_Y = randint(0,19)
+            tentativa_Y = input('Y: ')
             if tentativa_Y in intervalo:
               tentativa_Y = int(tentativa_Y)
               break
